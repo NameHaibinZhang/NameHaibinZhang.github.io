@@ -94,7 +94,7 @@ spec:
 Consumer服务直接通过k8s api Server订阅对应的服务，从annotations获取服务注册列表，找到后直接访问对应的服务（这里访问服务可以通过Service域名的方式，也可以通过endpoint ip访问），这样的方式简单直接，但是会有2个问题：
 
 - 1、k8s api Server性能问题，如果服务过多，会导致k8s集群不稳定
-- 2、通过watch服务的方式需要开发者定义服务、接口时候比较规范，通过服务名、namespace去k8s获取需要的数据
+- 2、通过watch服务的方式需要Consumer端知道服务的名称，然后根据名称去get、watch对应的服务列表，所以接口的名称和服务名称需要定义规范
 
 
 ### Consuemr对接Opreator
@@ -115,8 +115,6 @@ dubbo sdk端开一个grpc接口与Opreator的服务推送接口进行双向通�
 Operator可以直接通过Operator Framework生成一个框架，生成后添加对应的逻辑即可
 
 在pkg/controller/appservice/appservice_controller.go中Reconcile不断的 watch 资源的状态，然后根据状态的不同去实现各种操作逻辑，其中可以包含服务的创建、启动、健康检查，数据推送。
-
-可以参考https://www.qikqiak.com/post/k8s-operator-101/
 
 未完待续
 
